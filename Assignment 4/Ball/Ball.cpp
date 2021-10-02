@@ -1,5 +1,6 @@
 #include "Ball.h"
 #include <math.h>
+#include <iostream>
 
 ball::ball(point start, vec acc, double timestep){
     q = start;
@@ -11,6 +12,12 @@ void ball::set_wall(line* new_wall) {
     wall = new_wall;
 }
 
+void ball::set_timestep(double timestep) {
+    dt = timestep;
+}
+void ball::set_collision_call(bool decision) {
+    collision_messaging = decision;
+}
 void ball::push(double v_applied, double a){
     const double pi = 3.1415;
     v.x += v_applied*cos(pi*a/180);
@@ -18,7 +25,10 @@ void ball::push(double v_applied, double a){
 }
 void ball::fly(){
     double t_c = collission_alarm();
-    if (wall_set && (t_c <= dt)){
+    if (wall_set && (t_c < dt)){
+        if(collision_messaging){
+            std::cout << "Collision happened!" << std::endl;
+        }
         q.x += v.x * t_c + a.x * t_c * t_c / 2;
         q.y += v.y * t_c + a.y * t_c * t_c / 2;
         v.x += a.x * t_c;
@@ -57,13 +67,13 @@ double ball::collission_alarm() {
     double k2 = (wall->A*v.x + wall->B*v.y);
     double k3 = (wall->C + wall->A*q.x + wall->B*q.y);
     double D = k2*k2 - 4*k1*k3;
-    if (k1 == 0){
-        if (k2 == 0){
+    if (abs(k1) < epsilon){
+        if (abs(k2) < epsilon){
             //Костыль to make it realize, that there won't be a collision
             return dt+1;
         }
         double t = -k3/k2;
-        return (t>=0) ? t : (dt+1);
+        return (t>0) ? t : (dt+1);
     }
     if (D<0){
         return dt+1;
@@ -72,7 +82,7 @@ double ball::collission_alarm() {
         double t1 = (-k2 + sqrt(D))/(2*k1);
         double t2 = (-k2 - sqrt(D))/(2*k1);
         if(t1 < 0){
-            return dt+1;
+            return (abs(t1) < epsilon) ? 0 : dt+1;
         }
         else if(t2 < 0){
             return t1;

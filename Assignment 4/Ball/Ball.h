@@ -25,10 +25,14 @@ struct ball{
     vec v = {0,0};
     vec a;
     line* wall;
+    double epsilon = 1e-16;
     bool wall_set;
+    bool collision_messaging = true;
     double dt;
     ball(point start, vec acc, double timestep = 0.01);
     void set_wall(line* new_wall);
+    void set_timestep(double timestep);
+    void set_collision_call(bool);
     void push(double v, double a);
     void fly();
     double collission_alarm();

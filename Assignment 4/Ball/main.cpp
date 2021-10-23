@@ -5,11 +5,11 @@
 #include <string>
 
 void print_ball_position(ball b){
-    std::cout << "Ball's position: " << b.q.x << " " << b.q.y << std::endl;
+    std::cout << "Ball's position: " << b.get_position().x << " " << b.get_position().y << std::endl;
 }
 
 void print_ball_speed(ball b){
-    std::cout << "Ball's velocity: " << b.v.x << " " << b.v.y << std::endl;
+    std::cout << "Ball's velocity: " << b.get_velocity().x << " " << b.get_velocity().y << std::endl;
 }
 
 int main() {

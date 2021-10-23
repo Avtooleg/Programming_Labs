@@ -20,21 +20,30 @@ struct line{
     {}
 };
 
-struct ball{
-    point q;
-    vec v = {0,0};
-    vec a;
-    line* wall;
-    double epsilon = 1e-16;
-    bool wall_set;
-    bool collision_messaging = true;
-    double dt;
+class ball{
+    public:
+
     ball(point start, vec acc, double timestep = 0.01);
     void set_wall(line* new_wall);
     void set_timestep(double timestep);
     void set_collision_call(bool);
+    point get_position();
+    vec get_velocity();
+
     void push(double v, double a);
     void fly();
+
     double collission_alarm();
+
+    private:
+
+    point q;
+    vec v = {0,0};
+    vec a;
+    line* wall;
+    bool wall_set;
+    bool collision_messaging = true;
+    double dt;
+    double epsilon = 1e-16;
 };
 #endif //INFO_SEM_3_BALL_H

@@ -18,6 +18,13 @@ void ball::set_timestep(double timestep) {
 void ball::set_collision_call(bool decision) {
     collision_messaging = decision;
 }
+point ball::get_position() {
+    return q;
+}
+vec ball::get_velocity() {
+    return v;
+}
+
 void ball::push(double v_applied, double a){
     const double pi = 3.1415;
     v.x += v_applied*cos(pi*a/180);
